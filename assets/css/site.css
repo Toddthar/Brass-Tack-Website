@@ -3,6 +3,17 @@
    Palette pulled from the logo: brass #F78F1E on near-black.
    ========================================================================== */
 
+/* Fonts are self-hosted (Archivo and Inter, SIL Open Font License, see
+   assets/fonts/OFL-*.txt). Same files and weight declarations Google Fonts
+   served, so rendering is identical, but no request leaves the site. */
+@font-face{font-family:"Archivo";font-style:normal;font-weight:400;font-display:swap;src:url(../fonts/archivo-latin.woff2) format("woff2");unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:"Archivo";font-style:normal;font-weight:500;font-display:swap;src:url(../fonts/archivo-latin.woff2) format("woff2");unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:"Archivo";font-style:normal;font-weight:600;font-display:swap;src:url(../fonts/archivo-latin.woff2) format("woff2");unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:"Archivo";font-style:normal;font-weight:700;font-display:swap;src:url(../fonts/archivo-latin.woff2) format("woff2");unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:"Inter";font-style:normal;font-weight:400;font-display:swap;src:url(../fonts/inter-latin.woff2) format("woff2");unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:"Inter";font-style:normal;font-weight:500;font-display:swap;src:url(../fonts/inter-latin.woff2) format("woff2");unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:"Inter";font-style:normal;font-weight:600;font-display:swap;src:url(../fonts/inter-latin.woff2) format("woff2");unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+
 :root{
   --ink:#0F1012;
   --ink-2:#26282C;
@@ -178,6 +189,7 @@ body.nav-open .site-header{
 .nav a.btn-primary{background:var(--ink);color:#fff}
 .nav a.btn-primary:hover{background:var(--brass);color:#fff}
 
+.header-cta-mobile{display:none}
 .nav-toggle{
   display:none;background:none;border:0;padding:10px;margin-right:-10px;cursor:pointer;color:var(--ink);
 }
@@ -188,6 +200,12 @@ body.nav-open .nav-toggle span:nth-child(2){opacity:0}
 body.nav-open .nav-toggle span:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
 
 @media (max-width:900px){
+  .header-inner{gap:12px}
+  .header-cta-mobile{
+    display:inline-flex;margin-left:auto;min-height:44px;
+    padding:.6em 1.15em;font-size:.9rem;
+  }
+  body.nav-open .header-cta-mobile{visibility:hidden}
   .nav-toggle{display:block}
   .nav{
     position:fixed;inset:76px 0 0;background:var(--paper);z-index:99;
@@ -510,8 +528,11 @@ address{font-style:normal}
 }
 
 /* ---------- reveal ---------- */
-.reveal{opacity:0;transform:translateY(16px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
-.reveal.in{opacity:1;transform:none}
+.reveal{transition:opacity .7s var(--ease),transform .7s var(--ease)}
+/* Hidden only under .js, which an inline script in <head> adds and removes
+   again if site.js never loads. No JavaScript means nothing is ever hidden. */
+.js .reveal{opacity:0;transform:translateY(16px)}
+.js .reveal.in{opacity:1;transform:none}
 @media (prefers-reduced-motion:reduce){
   .reveal{opacity:1!important;transform:none!important;transition:none}
   *,*::before,*::after{animation-duration:.001ms!important;transition-duration:.001ms!important}
@@ -670,3 +691,12 @@ address{font-style:normal}
   .cap-card details{padding-top:8px}
   .cap-card summary{padding-block:11px}
 }
+
+/* very narrow phones (320-360px): keep logo, button and menu on one line */
+@media (max-width:360px){
+  .brand img{width:128px}
+  .header-cta-mobile{padding:.55em .9em;font-size:.82rem}
+}
+
+/* one-line pricing terms under the website tiers */
+.price-note{margin:22px 0 0;font-size:.9rem;color:var(--muted);max-width:70ch}

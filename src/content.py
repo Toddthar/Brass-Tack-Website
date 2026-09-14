@@ -18,6 +18,10 @@ SITE = {
     "city": "Salt Lake City",
     "region": "UT",
     "postal": "84101",
+    # REMINDER: Andrew says this is no longer an accurate business address (likely
+    # an old PO box). Replace street/city/region/postal with the current address
+    # before launch, then set address_confirmed to True. build.py warns until then.
+    "address_confirmed": False,
     "country": "US",
     "founded": "2011",
     # NEW - footer blurb
@@ -266,6 +270,10 @@ PACKAGES = {
 WEBSITES = {
     "h2": "Websites, designed and built",
     "new": True,          # renders the small brass "New" marker beside the heading
+    # NEW - stands in for a terms page. A dedicated terms page would not help
+    # speed or search for a site like this, so the one line does the job.
+    "note": "All prices in US dollars. Final pricing depends on project scope and is "
+            "confirmed before any work begins.",
     "lead": "A new offering. Sites built with AI in the loop and structured so both search "
             "engines and AI assistants can read, understand, and cite them correctly. Then "
             "reviewed and revised line by line by a human, because that is the part that "
@@ -396,7 +404,8 @@ FAQ = [
      "an experienced human. Responsible AI search optimization is built in, so the content "
      "is found, read, and cited correctly by the assistants people now search with."),
     ("Where is Brass Tack Communications located?",
-     "Brass Tack Communications is located at 37 W. 200 S., #352, Salt Lake City, UT 84101, "
-     "and works remotely with clients well beyond Utah. You can reach the team at "
-     "todd@brass-tack.com or +1 (801) 318-0191."),
+     "Brass Tack Communications is located at %s, %s, %s %s, and works remotely with "
+     "clients well beyond Utah. You can reach the team at %s or %s."
+     % (SITE["street"], SITE["city"], SITE["region"], SITE["postal"],
+        SITE["email"], SITE["phone_display"])),
 ]

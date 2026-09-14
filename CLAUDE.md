@@ -46,13 +46,18 @@ HTML that will run on any host (or just by double-clicking `index.html`).
 | `src/work.py` | All 22 portfolio pieces across 6 categories |
 | `assets/css/site.css` | The entire stylesheet (one file, no framework) |
 | `assets/js/site.js` | ~90 lines: mobile menu, scroll reveal, click-to-play video |
-| `assets/img/` | Logo (dark + light), favicon, touch icon |
+| `assets/img/` | Display logos (420px), share image `og-image.jpg`, app icons |
+| `assets/brand/` | Full-size 1500px master logos. Keep these: once Squarespace is cancelled they are the only high-res copies |
+| `assets/fonts/` | Self-hosted Archivo + Inter (woff2) and their OFL licenses |
 | `assets/logos/` | 15 client logos (WebP) |
 | `assets/work/` | Portfolio images and video posters (WebP) |
-| `assets/files/` | The 9 original PDFs + the Legends copy image |
+| `s/` | The 9 original PDFs + the Legends copy image. Named `s/` because that is the exact path the old Squarespace site used, so old links keep working |
+| `home/`, `video/`, `events/`, `advertising/`, `articles/`, `print/`, `web/` | Generated one-line redirect pages for the 13 old Squarespace addresses |
+| `favicon.ico`, `site.webmanifest` | Browser tab icon and Android/app icon manifest |
 
 Generated files you should **not** hand-edit (rerun `build.py` instead):
-all `*.html`, `sitemap.xml`, `robots.txt`, `llms.txt`, `assets/img/favicon.svg`.
+all top-level `*.html`, the redirect folders listed above, `sitemap.xml`,
+`robots.txt`, `llms.txt`.
 
 ## Pages
 
@@ -103,8 +108,11 @@ rather than being padded out, which would have shifted their underline.
 ## Design
 
 - Brass `#F78F1E` (sampled from the logo) on near-black `#0F1012`, warm white `#FBFAF7`
-- Archivo (headings) + Inter (body), both Google Fonts. The old site used Adobe's
-  Acumin Pro, which needs a paid Typekit; Archivo is the closest free match.
+- Archivo (headings) + Inter (body), self-hosted from `assets/fonts/` (both SIL
+  Open Font License). The `@font-face` rules copy the exact weight declarations
+  Google Fonts served, so headings still render at 700 even though CSS asks for
+  650. Do not switch to a weight range or headings will visibly lighten.
+  The old site used Adobe's Acumin Pro (paid Typekit); Archivo is the closest free match.
 - No "section header pills" anywhere, per the brief. Headings only.
 
 ## AI search + SEO
@@ -126,6 +134,37 @@ rather than being padded out, which would have shifted their underline.
   actually clicks play
 - Explicit `width`/`height` on every image so nothing shifts while loading
 - One CSS file, one small JS file, no framework, no tracking
+
+## Robustness details worth knowing
+
+- **404 page** is served for every missing address, including nested ones like
+  `/home-1/x`. An inline script sets its `<base>` to the site root (`/` on the
+  real domain, `/<repo>/` on a github.io preview) so its CSS and logo still load.
+- **Scroll-in sections** hide only when `<html>` has the `js` class. An inline
+  script adds it before paint and removes it after 3 seconds unless `site.js`
+  sets `window.btReady`. So if JavaScript is off or fails, everything shows.
+- **Share image** is one branded `assets/img/og-image.jpg` (1200x630 JPG) on every
+  page. JPG on purpose: LinkedIn and some apps preview WebP unreliably.
+- **Phone header** shows a "Let's chat" button beside the menu icon at 900px and
+  below, sized for 320px screens.
+
+## Before go-live checklist
+
+- [ ] **Business address.** 37 W. 200 S., #352 is no longer accurate (likely an
+      old PO box). Get the current address from Todd, update `SITE` in
+      `src/content.py`, set `address_confirmed` to True. `build.py` prints a
+      warning on every build until then.
+- [ ] **Google Analytics.** Add the G- Measurement ID once the site is live on the
+      real domain. Pair it with a privacy policy and, for UK/Ireland visitors, a
+      cookie banner.
+- [ ] Transfer the repo to Todd's GitHub organization and repoint the local remote.
+- [ ] Set the GitHub Pages custom domain to `www.brass-tack.com`, update the four
+      `@` A records and the `www` CNAME at GoDaddy. Do NOT touch MX, TXT or
+      `autodiscover`: that is Todd's Microsoft 365 email.
+- [ ] Enforce HTTPS, then test the site, a few old addresses (`/home/video`,
+      `/s/RizePoint_BrandBldgWP.pdf`) and a round-trip email.
+- [ ] Set up Google Search Console + Bing Webmaster Tools, submit `sitemap.xml`.
+- [ ] Cancel the Squarespace website plan about two weeks after launch (domain is at GoDaddy, unaffected).
 
 ## Known quirks (all deliberate)
 

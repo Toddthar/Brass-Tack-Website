@@ -55,6 +55,22 @@ PLAY = ('<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">'
 # ------------------------------------------------------------ shared chrome --
 BRASS_RULE = '<span class="brass-rule" aria-hidden="true"></span>'
 
+# Marks the page as JavaScript-capable before anything paints, so scroll-in
+# sections can start hidden without flashing. If site.js has not checked in
+# within 3 seconds (blocked, failed, very slow), the mark is removed and every
+# section simply shows. Without JavaScript at all, nothing is ever hidden.
+EARLY_JS = ('document.documentElement.classList.add("js");'
+            'setTimeout(function(){if(!window.btReady)'
+            'document.documentElement.classList.remove("js")},3000)')
+
+# The 404 page is served for ANY missing address, including nested ones like
+# /home/video, where relative paths such as assets/css/site.css would resolve
+# to /home/assets/... and fail. This sets the page's base address to the site
+# root: "/" on brass-tack.com, "/<repo>/" on a github.io preview.
+BASE_TAG = ('\n<script>(function(){var p=location.pathname.split("/"),r="/";'
+            'if(/\\.github\\.io$/.test(location.hostname)&&p[1])r="/"+p[1]+"/";'
+            'document.write(\'<base href="\'+r+\'">\')})()</script>')
+
 
 def header(active):
     links = []
@@ -66,9 +82,10 @@ def header(active):
 <header class="site-header">
   <div class="wrap-wide header-inner">
     <a class="brand" href="index.html" aria-label="Brass Tack Communications, home">
-      <img src="assets/img/brass-tack-logo.png" width="1500" height="404"
+      <img src="assets/img/brass-tack-logo.png" width="420" height="113"
            alt="Brass Tack Communications" fetchpriority="high" decoding="async">
     </a>
+    <a class="btn btn-primary header-cta-mobile" href="contact.html">Let&rsquo;s chat</a>
     <button class="nav-toggle" type="button" aria-expanded="false"
             aria-controls="primary-nav" aria-label="Menu">
       <span></span><span></span><span></span>
@@ -101,7 +118,7 @@ def footer():
   <div class="wrap-wide">
     <div class="footer-top">
       <div class="footer-brand">
-        <img src="assets/img/brass-tack-logo-light.png" width="1500" height="404"
+        <img src="assets/img/brass-tack-logo-light.png" width="420" height="113"
              alt="Brass Tack Communications" loading="lazy" decoding="async">
         <p>%s</p>
       </div>
@@ -135,7 +152,8 @@ def footer():
 
 
 # ------------------------------------------------------------------ shell --
-def page(filename, title, description, body, schema=None, og_image="assets/work/cover-video.webp"):
+def page(filename, title, description, body, schema=None, og_image="assets/img/og-image.jpg",
+         robots="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"):
     # SEO title/description live in content.META so they can be tuned without
     # touching page copy. Fall back to whatever the caller passed.
     title, description = C.META.get(filename, (title, description))
@@ -149,11 +167,12 @@ def page(filename, title, description, body, schema=None, og_image="assets/work/
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">%(base_tag)s
+<script>%(early_js)s</script>
 <title>%(title)s</title>
 <meta name="description" content="%(desc)s">
 <link rel="canonical" href="%(url)s">
-<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+<meta name="robots" content="%(robots)s">
 <meta name="author" content="Brass Tack Communications">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Brass Tack Communications">
@@ -161,6 +180,10 @@ def page(filename, title, description, body, schema=None, og_image="assets/work/
 <meta property="og:description" content="%(desc)s">
 <meta property="og:url" content="%(url)s">
 <meta property="og:image" content="%(base)s/%(og)s">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Brass Tack Communications: Putting words, ideas, and stories to work for your business">
 <meta property="og:locale" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="%(title)s">
@@ -169,12 +192,12 @@ def page(filename, title, description, body, schema=None, og_image="assets/work/
 <meta name="theme-color" content="#0F1012">
 <meta property="og:updated_time" content="%(today)s">
 <meta name="last-modified" content="%(today)s">
-<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon.ico" sizes="16x16 32x32 48x48">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/img/icon-192.png">
 <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap">
+<link rel="manifest" href="site.webmanifest">
+<link rel="preload" href="assets/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/css/site.css">%(schema)s
 </head>
 <body>
@@ -187,6 +210,8 @@ def page(filename, title, description, body, schema=None, og_image="assets/work/
 </html>
 """ % {"title": esc(title), "desc": esc(description), "url": url, "base": BASE,
        "og": og_image, "schema": blocks, "header": header(filename),
+       "robots": robots, "early_js": EARLY_JS,
+       "base_tag": BASE_TAG if filename == "404.html" else "",
        "today": TODAY, "body": body, "footer": footer()}
     with open(os.path.join(HERE, filename), "w", encoding="utf-8") as f:
         f.write(html)
@@ -201,9 +226,9 @@ ORG = {
     "name": S["name"],
     "alternateName": "Brass Tack",
     "url": BASE + "/",
-    "logo": {"@type": "ImageObject", "url": BASE + "/assets/img/brass-tack-logo.png",
+    "logo": {"@type": "ImageObject", "url": BASE + "/assets/brand/brass-tack-logo-1500.png",
              "width": 1500, "height": 404},
-    "image": BASE + "/assets/img/brass-tack-logo.png",
+    "image": BASE + "/assets/brand/brass-tack-logo-1500.png",
     "foundingDate": S["founded"],
     "slogan": "Putting words, ideas, and stories to work for your business",
     "description": ("Brass Tack Communications is a content and messaging shop that creates "
@@ -568,7 +593,7 @@ def build_home():
     return page("index.html",
                 "Brass Tack Communications | Content Strategy, Messaging, and Copywriting",
                 C.HOME["lead"], body,
-                schema=[ORG, WEBSITE, PERSON], og_image="assets/work/cover-video.webp")
+                schema=[ORG, WEBSITE, PERSON])
 
 
 def build_work_hub():
@@ -607,8 +632,7 @@ def build_work_hub():
 
     return page("work.html", "Work | Brass Tack Communications",
                 W.WORK_HUB["lead"], body,
-                schema=[listing, crumbs_schema([("Home", "index.html"), ("Work", "work.html")])],
-                og_image="assets/work/" + W.CATEGORIES[0]["cover"])
+                schema=[listing, crumbs_schema([("Home", "index.html"), ("Work", "work.html")])])
 
 
 def build_category(idx, cat):
@@ -673,8 +697,7 @@ def build_category(idx, cat):
 
     return page("work-%s.html" % cat["slug"],
                 "%s | Brass Tack Communications" % plain(cat["h1"]),
-                cat["meta"], body, schema=schema,
-                og_image="assets/work/" + cat["cover"])
+                cat["meta"], body, schema=schema)
 
 
 def cat_title(item):
@@ -734,6 +757,7 @@ def build_services():
     <div class="offer-grid">
 %s
     </div>
+    <p class="price-note">%s</p>
   </div>
 </section>
 
@@ -743,6 +767,7 @@ def build_services():
          esc(C.PACKAGES["h2"]), esc(C.PACKAGES["lead"]),
          pkg_grid(C.PACKAGES["items"]),
          esc(C.WEBSITES["h2"]), esc(C.WEBSITES["lead"]), pkg_grid(C.WEBSITES["items"]),
+         esc(C.WEBSITES["note"]),
          cta_band())
 
     svc = {"@context": "https://schema.org", "@type": "WebPage",
@@ -769,8 +794,7 @@ def build_services():
     return page("services.html", "Services | Brass Tack Communications",
                 plain(C.SERVICES["lead"])[:300], body,
                 schema=[svc, WEB_SERVICE, crumbs_schema([("Home", "index.html"),
-                                            ("Services", "services.html")])],
-                og_image="assets/work/cover-collateral.webp")
+                                            ("Services", "services.html")])])
 
 
 def build_about():
@@ -847,8 +871,7 @@ def build_about():
     return page("about.html", "About | Brass Tack Communications",
                 plain(C.ABOUT["lead"])[:300], body,
                 schema=[about, PERSON, FAQ_SCHEMA,
-                        crumbs_schema([("Home", "index.html"), ("About", "about.html")])],
-                og_image="assets/work/cover-events.webp")
+                        crumbs_schema([("Home", "index.html"), ("About", "about.html")])])
 
 
 def build_contact():
@@ -904,8 +927,7 @@ def build_contact():
                 "Learn more about what Brass Tack Communications can bring to your next "
                 "project. Email todd@brass-tack.com or call +1 (801) 318-0191.", body,
                 schema=[cp, ORG, crumbs_schema([("Home", "index.html"),
-                                                ("Contact", "contact.html")])],
-                og_image="assets/work/cover-articles.webp")
+                                                ("Contact", "contact.html")])])
 
 
 def build_404():
@@ -921,7 +943,7 @@ def build_404():
   </div>
 </section>""" % ARROW
     return page("404.html", "Page not found | Brass Tack Communications",
-                "That page could not be found.", body)
+                "That page could not be found.", body, robots="noindex, follow")
 
 
 # --------------------------------------------------- robots / sitemap / llms --
@@ -1054,8 +1076,8 @@ def build_llms():
         A("| %s | %s | %s |" % (i["name"], i["desc"], i["price"]))
     A("")
     A("The tiers stack: the build price is in addition to the content price, and "
-      "ongoing care is in addition to the build. Available to clients in %s."
-      % ", ".join(n for _, n in C.SERVES))
+      "ongoing care is in addition to the build. Available to clients in %s. %s"
+      % (", ".join(n for _, n in C.SERVES), C.WEBSITES["note"]))
     A("")
     A("## Work")
     A("")
@@ -1084,15 +1106,54 @@ def build_llms():
     return "llms.txt"
 
 
-def build_icons():
-    """Small brass favicon drawn inline so there is no binary to manage."""
-    svg = ('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">'
-           '<rect width="64" height="64" rx="13" fill="#0F1012"/>'
-           '<text x="32" y="45" font-family="Archivo,Helvetica,Arial,sans-serif" '
-           'font-size="38" font-weight="700" fill="#F78F1E" text-anchor="middle">b</text>'
-           '</svg>')
-    open(os.path.join(HERE, "assets/img/favicon.svg"), "w").write(svg)
-    return "assets/img/favicon.svg"
+# ------------------------------------------------------------ old addresses --
+# Every address the old Squarespace site served that the new site does not.
+# GitHub Pages cannot do server redirects, so each becomes a tiny page that
+# forwards instantly. /about, /services, /contact and /work already resolve on
+# their own. /home-1 and /take-action were template leftovers and are meant to 404.
+OLD_URLS = {
+    "home": "index.html",
+    "home/video": "work-video.html",
+    "home/events": "work-events.html",
+    "home/advertising": "work-advertising.html",
+    "home/articles": "work-articles.html",
+    "home/print": "work-collateral.html",
+    "home/web": "work-web.html",
+    "video": "work-video.html",
+    "events": "work-events.html",
+    "advertising": "work-advertising.html",
+    "articles": "work-articles.html",
+    "print": "work-collateral.html",
+    "web": "work-web.html",
+}
+
+
+def build_redirects():
+    made = []
+    for old, target in OLD_URLS.items():
+        dest = "../" * (old.count("/") + 1) + target
+        canonical = BASE + "/" + ("" if target == "index.html" else target)
+        html = """<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Moved | Brass Tack Communications</title>
+<meta name="robots" content="noindex, follow">
+<link rel="canonical" href="%s">
+<meta http-equiv="refresh" content="0; url=%s">
+<script>location.replace("%s" + location.hash)</script>
+</head>
+<body>
+<p>This page has moved. <a href="%s">Continue to the new page</a>.</p>
+</body>
+</html>
+""" % (canonical, dest, dest, dest)
+        folder = os.path.join(HERE, old)
+        os.makedirs(folder, exist_ok=True)
+        with open(os.path.join(folder, "index.html"), "w", encoding="utf-8") as f:
+            f.write(html)
+        made.append("/" + old)
+    return made
 
 
 # ------------------------------------------------------------------- main --
@@ -1101,13 +1162,19 @@ def main():
     for i, cat in enumerate(W.CATEGORIES):
         built.append(build_category(i, cat))
     built += [build_services(), build_about(), build_contact(), build_404()]
-    build_icons()
     extras = [build_robots(), build_sitemap(built), build_llms()]
+    redirects = build_redirects()
 
     print("Built %d pages:" % len(built))
     for p in built:
         print("   ", p)
     print("Plus:", ", ".join(extras))
+    print("Old-address redirects: %d" % len(redirects))
+    if not S.get("address_confirmed"):
+        print()
+        print("!! REMINDER BEFORE LAUNCH: the business address (%s, %s) is out of date."
+              % (S["street"], S["city"]))
+        print("!! Update it in src/content.py SITE, then set address_confirmed to True.")
 
 
 if __name__ == "__main__":

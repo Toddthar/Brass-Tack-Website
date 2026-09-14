@@ -14,7 +14,10 @@ Item keys:
   wide     True renders the piece full width instead of two columns
 """
 
-F = "assets/files/"
+# Downloadable files live in /s/ because that is exactly where the old
+# Squarespace site served them (brass-tack.com/s/...). Keeping the same path
+# means existing links in emails, proposals and search results keep working.
+F = "s/"
 
 CATEGORIES = [
     {

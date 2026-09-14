@@ -2,6 +2,9 @@
 (function () {
   'use strict';
 
+  /* Tell the inline <head> script this file loaded, so it keeps .js in place. */
+  window.btReady = true;
+
   /* --- 1. Mobile navigation ------------------------------------------- */
   var toggle = document.querySelector('.nav-toggle');
   var nav = document.getElementById('primary-nav');

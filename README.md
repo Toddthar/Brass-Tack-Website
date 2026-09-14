@@ -10,6 +10,15 @@ Everything in this folder **is** the website. There is nothing to install.
 
 ---
 
+## ⚠️ Before this goes live
+
+1. **The business address is out of date.** 37 W. 200 S., #352 is no longer
+   accurate. Get Todd's current address and it's a one-place change. (Every time
+   the site is rebuilt, it prints a reminder until this is done.)
+2. **Add Google Analytics** once the site is live on brass-tack.com.
+
+The full launch checklist is in `CLAUDE.md`.
+
 ## Updating the live preview
 
 Make your change, rebuild, then push. The preview updates itself in about a minute.
