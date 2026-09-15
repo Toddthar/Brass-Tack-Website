@@ -132,9 +132,9 @@ The website tiers now carry real prices:
 
 | Tier | Price |
 |---|---|
-| Content only | $3,000 |
-| Build and handoff | +$5,000 |
-| Ongoing care and content | +$250/month |
+| Content only | $4,000 |
+| Build and handoff | +$6,000 |
+| Ongoing care and content | +$300/month |
 
 The `+` prefixes are deliberate: each tier stacks on the one before it.
 

@@ -42,9 +42,9 @@ A new offering. Sites built with AI in the loop and structured so both search en
 
 | Tier | What it includes | Price (USD) |
 | --- | --- | --- |
-| Content only | Everything that goes on the site: structure, what belongs on each page, and the words themselves. Hand it to whoever builds it. | $3,000 |
-| Build and handoff | We design it, build it, and hand you the finished site along with everything it runs on. It is yours to host, own, and change whenever you like. | +$5,000 |
-| Ongoing care and content | Everything in the handoff option, plus we keep it running: updates, new pages, fresh content, fixes, and continued search and AI optimization as things change. | +$250/month |
+| Content only | Everything that goes on the site: structure, what belongs on each page, and the words themselves. Hand it to whoever builds it. | $4,000 |
+| Build and handoff | We design it, build it, and hand you the finished site along with everything it runs on. It is yours to host, own, and change whenever you like. | +$6,000 |
+| Ongoing care and content | Everything in the handoff option, plus we keep it running: updates, new pages, fresh content, fixes, and continued search and AI optimization as things change. | +$300/month |
 
 The tiers stack: the build price is in addition to the content price, and ongoing care is in addition to the build. Available to clients in United States, Canada, United Kingdom, Australia, New Zealand, Ireland. All prices in US dollars. Final pricing depends on project scope and is confirmed before any work begins.
 
@@ -111,7 +111,7 @@ Brass Tack is a small, specialized shop that focuses exclusively on content, mes
 
 ### How much does a small business website cost?
 
-Brass Tack prices websites in three stacking tiers. Content only is $3,000 and covers site structure, what belongs on each page, and the words themselves. Adding design, build, and handoff of the finished site is a further $5,000. Ongoing care and content, which keeps the site updated and optimized, is a further $250 a month. Content projects other than websites are scoped and quoted per project.
+Brass Tack prices websites in three stacking tiers. Content only is $4,000 and covers site structure, what belongs on each page, and the words themselves. Adding design, build, and handoff of the finished site is a further $6,000. Ongoing care and content, which keeps the site updated and optimized, is a further $300 a month. Content projects other than websites are scoped and quoted per project.
 
 ### What is included in a Brass Tack website build?
 
@@ -119,7 +119,7 @@ The build tier covers design and development of the finished site along with eve
 
 ### Can Brass Tack write the content for a website someone else builds?
 
-Yes. That is the content only tier at $3,000: site structure, what belongs on each page, and the words themselves, handed to whoever is doing the build.
+Yes. That is the content only tier at $4,000: site structure, what belongs on each page, and the words themselves, handed to whoever is doing the build.
 
 ### Who does Brass Tack Communications work with?
 

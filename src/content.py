@@ -74,7 +74,7 @@ META = {
     "services.html": (
         "Services & Pricing | Content, Copywriting and Websites",
         "Content strategy, messaging, copywriting, and event content. Plus websites "
-        "written and built by people: $3,000 content, +$5,000 build."),
+        "written and built by people: $4,000 content, +$6,000 build."),
     "about.html": (
         "About | A Senior-Only Content Team, Working Since 2011",
         "A small, specialized content shop. No junior writers, and you always work "
@@ -284,18 +284,18 @@ WEBSITES = {
          # contradict the tier name; substance unchanged
          "desc": "Everything that goes on the site: structure, what belongs on each page, "
                  "and the words themselves. Hand it to whoever builds it.",
-         "price": "$3,000"},
+         "price": "$4,000"},
         # the + prefixes read as additive: each tier builds on the one before it
         {"name": "Build and handoff",
          "desc": "We design it, build it, and hand you the finished site along with "
                  "everything it runs on. It is yours to host, own, and change whenever "
                  "you like.",
-         "price": "+$5,000"},
+         "price": "+$6,000"},
         {"name": "Ongoing care and content",
          "desc": "Everything in the handoff option, plus we keep it running: updates, new "
                  "pages, fresh content, fixes, and continued search and AI optimization as "
                  "things change.",
-         "price": "+$250/month"},
+         "price": "+$300/month"},
     ],
 }
 
@@ -371,10 +371,10 @@ FAQ = [
      "standing between you and the work. There are no junior writers, and your team always "
      "works directly with the person or team actually doing the work."),
     ("How much does a small business website cost?",
-     "Brass Tack prices websites in three stacking tiers. Content only is $3,000 and covers "
+     "Brass Tack prices websites in three stacking tiers. Content only is $4,000 and covers "
      "site structure, what belongs on each page, and the words themselves. Adding design, "
-     "build, and handoff of the finished site is a further $5,000. Ongoing care and content, "
-     "which keeps the site updated and optimized, is a further $250 a month. Content projects "
+     "build, and handoff of the finished site is a further $6,000. Ongoing care and content, "
+     "which keeps the site updated and optimized, is a further $300 a month. Content projects "
      "other than websites are scoped and quoted per project."),
     ("What is included in a Brass Tack website build?",
      "The build tier covers design and development of the finished site along with everything "
@@ -383,7 +383,7 @@ FAQ = [
      "structured so both search engines and AI assistants can read, understand, and cite them "
      "correctly, then reviewed and revised line by line by a human."),
     ("Can Brass Tack write the content for a website someone else builds?",
-     "Yes. That is the content only tier at $3,000: site structure, what belongs on each page, "
+     "Yes. That is the content only tier at $4,000: site structure, what belongs on each page, "
      "and the words themselves, handed to whoever is doing the build."),
     ("Who does Brass Tack Communications work with?",
      "Clients have included ServiceNow, Ivanti, Malwarebytes, DigiCert, Commvault, Broadcom, "
