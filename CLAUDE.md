@@ -11,11 +11,11 @@ both traditional search and AI assistants.
   on Todd's **personal** GitHub account (public). Andrew is a collaborator with
   **write** access: he can push, but only Todd can change Settings (Pages,
   custom domain, HTTPS, collaborators, transfer, delete).
-- Preview (once Todd enables Pages): <https://toddthar.github.io/Brass-Tack-Website/>
+- Live preview: <https://toddthar.github.io/Brass-Tack-Website/> (GitHub Pages, `main`, root folder; enabled by Todd 2026-09-15)
 - Local git remotes: `origin` = Todd's repo (push here). `old-andrew` = the
   original `andrewmswensen-hue/brass-tack-website`, kept as a backup and still
-  serving an older preview. Do not push new work there; retire it only after
-  asking Andrew.
+  serving an older preview. Its push URL is deliberately disabled so work can't
+  land there by mistake. Retire it only after asking Andrew.
 
 Push to `main` and Pages redeploys. Always run `python3 build.py` before
 committing, or the `.html` files will be out of sync with `src/`.
@@ -179,7 +179,7 @@ rather than being padded out, which would have shifted their underline.
       real domain. Pair it with a privacy policy and, for UK/Ireland visitors, a
       cookie banner.
 - [x] Move the site to Todd's GitHub (`Toddthar/Brass-Tack-Website`) and repoint the local remote.
-- [ ] **Todd:** turn on GitHub Pages (Settings → Pages → Branch `main`, folder `/ (root)`).
+- [x] **Todd:** turn on GitHub Pages (Settings → Pages → Branch `main`, folder `/ (root)`).
 - [ ] Retire the old `andrewmswensen-hue/brass-tack-website` copy (ask Andrew first).
 - [ ] Optional: Todd moves the repo into his organization and makes Andrew an Owner, if both want full Settings control.
 - [ ] Set the GitHub Pages custom domain to `www.brass-tack.com`, update the four
