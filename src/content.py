@@ -36,6 +36,25 @@ NAV = [
     ("Contact", "contact.html"),
 ]
 
+# NEW - questions about the website offering, shown on websites.html only.
+WEBSITE_FAQ = [
+    ("How much does a small business website cost?",
+     "Brass Tack prices websites in three stacking tiers. Content only is $4,000 and covers "
+     "site structure, what belongs on each page, and the words themselves. Adding design, "
+     "build, and handoff of the finished site is a further $6,000. Ongoing care and content, "
+     "which keeps the site updated and optimized, is a further $300 a month. Content projects "
+     "other than websites are scoped and quoted per project."),
+    ("What is included in a Brass Tack website build?",
+     "The build tier covers design and development of the finished site along with everything "
+     "it runs on, handed over for you to host, own, and change. It builds on the content tier, "
+     "which covers structure, what belongs on each page, and the copy itself. Sites are "
+     "structured so both search engines and AI assistants can read, understand, and cite them "
+     "correctly, then reviewed and revised line by line by a human."),
+    ("Can Brass Tack write the content for a website someone else builds?",
+     "Yes. That is the content only tier at $4,000: site structure, what belongs on each page, "
+     "and the words themselves, handed to whoever is doing the build."),
+]
+
 # --------------------------------------------------------------------------
 # SEO / AIO  (NEW - none of this is visible on the page. Titles show in browser
 #             tabs and search results; descriptions show as the search snippet.)
@@ -72,16 +91,22 @@ META = {
         "Content work for ServiceNow, Ivanti, Malwarebytes, DigiCert and Broadcom: "
         "video scripts, white papers, collateral, campaigns, and events."),
     "services.html": (
-        "Services & Pricing | Content, Copywriting and Websites",
-        "Content strategy, messaging, copywriting, and event content. Plus websites "
-        "written and built by people: $4,000 content, +$6,000 build."),
+        "Services & Pricing | Content Strategy and Copywriting",
+        "Content strategy, messaging, copywriting, scriptwriting, and event content "
+        "from a senior-only team. Scoped and quoted per project."),
+    # Soft-launch landing page for the website offering. Linked only from the
+    # footer and noindexed while WEBSITES["public"] is False.
+    "websites.html": (
+        "Websites, Designed and Built | Brass Tack Communications",
+        "Websites written and built by people, with AI in the loop: $4,000 content "
+        "only, +$6,000 build and handoff, +$300/month ongoing care."),
     "about.html": (
         "About | A Senior-Only Content Team, Working Since 2011",
         "A small, specialized content shop. No junior writers, and you always work "
         "directly with the person actually doing the work."),
     "contact.html": (
         "Contact Brass Tack Communications",
-        "Talk to Brass Tack about your next content, messaging, or website project. "
+        "Talk to Brass Tack about your next content or messaging project. "
         "Email todd@brass-tack.com or call +1 (801) 318-0191."),
     "work-video.html": (
         "Video Scripts & Story Direction | Brass Tack",
@@ -270,6 +295,10 @@ PACKAGES = {
 WEBSITES = {
     "h2": "Websites, designed and built",
     "new": True,          # renders the small brass "New" marker beside the heading
+    # False = soft launch: websites.html is live but linked only from the footer,
+    # marked noindex, and left out of sitemap.xml, llms.txt and the business-wide
+    # schema. Set True when ready to promote it; nothing else needs to change.
+    "public": False,
     # NEW - stands in for a terms page. A dedicated terms page would not help
     # speed or search for a site like this, so the one line does the job.
     "note": "All prices in US dollars. Final pricing depends on project scope and is "
@@ -370,26 +399,10 @@ FAQ = [
      "and writing, without the usual layers of business development teams and account managers "
      "standing between you and the work. There are no junior writers, and your team always "
      "works directly with the person or team actually doing the work."),
-    ("How much does a small business website cost?",
-     "Brass Tack prices websites in three stacking tiers. Content only is $4,000 and covers "
-     "site structure, what belongs on each page, and the words themselves. Adding design, "
-     "build, and handoff of the finished site is a further $6,000. Ongoing care and content, "
-     "which keeps the site updated and optimized, is a further $300 a month. Content projects "
-     "other than websites are scoped and quoted per project."),
-    ("What is included in a Brass Tack website build?",
-     "The build tier covers design and development of the finished site along with everything "
-     "it runs on, handed over for you to host, own, and change. It builds on the content tier, "
-     "which covers structure, what belongs on each page, and the copy itself. Sites are "
-     "structured so both search engines and AI assistants can read, understand, and cite them "
-     "correctly, then reviewed and revised line by line by a human."),
-    ("Can Brass Tack write the content for a website someone else builds?",
-     "Yes. That is the content only tier at $4,000: site structure, what belongs on each page, "
-     "and the words themselves, handed to whoever is doing the build."),
     ("Who does Brass Tack Communications work with?",
      "Clients have included ServiceNow, Ivanti, Malwarebytes, DigiCert, Commvault, Broadcom, "
      "Cybersource, Optum Financial, Publicis Sapient, Henry Schein, DFIN, Micro Focus, Red "
-     "Rider, Gantry, and Event Marketing Partners, alongside small and medium businesses that "
-     "need a website whose words were actually written by a professional."),
+     "Rider, Gantry, and Event Marketing Partners."),
     ("Does Brass Tack work with clients outside of Utah?",
      "Yes. The work is done remotely, and Brass Tack takes on clients across the United States, "
      "Canada, the United Kingdom, Australia, New Zealand, and Ireland."),

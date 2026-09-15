@@ -132,6 +132,7 @@ def footer():
         <h2>Company</h2>
         <ul>
           <li><a href="services.html">Services</a></li>
+          <li><a href="websites.html">Websites</a></li>
           <li><a href="about.html">About</a></li>
           <li><a href="contact.html">Contact</a></li>
           <li><a href="mailto:%s">%s</a></li>
@@ -248,7 +249,8 @@ ORG = {
     "employee": {"@id": BASE + "/#todd"},
     "serviceType": ["Content strategy", "Messaging development", "Copywriting",
                     "Scriptwriting", "Ghostwriting", "White paper writing",
-                    "Event content management", "Website design and development"],
+                    "Event content management"]
+                   + (["Website design and development"] if C.WEBSITES["public"] else []),
     "knowsAbout": ["Content strategy", "Messaging development", "Concept development",
                    "Copywriting", "Scriptwriting", "Ghostwriting", "White papers",
                    "Event content management", "Corporate speechwriting",
@@ -300,7 +302,7 @@ PERSON = {
 # builds small business websites with professional copy has something to cite.
 WEB_SERVICE = {
     "@context": "https://schema.org", "@type": "Service",
-    "@id": BASE + "/services.html#websites",
+    "@id": BASE + "/websites.html#service",
     "name": "Website design, copywriting, and build",
     "serviceType": "Website design and development",
     "description": ("Websites built with AI in the loop and structured so search "
@@ -311,7 +313,7 @@ WEB_SERVICE = {
     "provider": {"@id": BASE + "/#organization"},
     "areaServed": [{"@type": "Country", "name": n} for _, n in C.SERVES],
     "availableChannel": {"@type": "ServiceChannel",
-                         "serviceUrl": BASE + "/services.html",
+                         "serviceUrl": BASE + "/websites.html",
                          "servicePhone": S["phone_display"]},
     "audience": {"@type": "BusinessAudience",
                  "name": "Small and medium businesses"},
@@ -380,12 +382,23 @@ def collection_schema(cat):
                            "itemListElement": items}}
 
 
-FAQ_SCHEMA = {
-    "@context": "https://schema.org", "@type": "FAQPage",
-    "mainEntity": [{"@type": "Question", "name": q,
-                    "acceptedAnswer": {"@type": "Answer", "text": a}}
-                   for q, a in C.FAQ],
-}
+def faq_schema(items):
+    return {"@context": "https://schema.org", "@type": "FAQPage",
+            "mainEntity": [{"@type": "Question", "name": q,
+                            "acceptedAnswer": {"@type": "Answer", "text": a}}
+                           for q, a in items]}
+
+
+FAQ_SCHEMA = faq_schema(C.FAQ)
+
+
+def faq_html(items):
+    return "\n".join(
+        """    <details%s>
+      <summary>%s</summary>
+      <div class="faq-a"><p>%s</p></div>
+    </details>""" % (" open" if i == 0 else "", esc(q), esc(a))
+        for i, (q, a) in enumerate(items))
 
 
 # --------------------------------------------------------------- fragments --
@@ -748,26 +761,11 @@ def build_services():
   </div>
 </section>
 
-<section class="section-tight band-alt" aria-labelledby="site-h">
-  <div class="wrap-wide">
-    <div class="sec-head sec-head-col">
-      <h2 id="site-h"><span class="new-mark">New</span>%s</h2>
-      <p class="lead">%s</p>
-    </div>
-    <div class="offer-grid">
-%s
-    </div>
-    <p class="price-note">%s</p>
-  </div>
-</section>
-
 %s""" % (mark(esc(C.SERVICES["h1"]), "when you need it"), esc(C.SERVICES["lead"]),
          esc(C.SERVICES["cta"]), ARROW,
          esc(C.CAPABILITIES["h2"]), esc(C.CAPABILITIES["framer"]), items,
          esc(C.PACKAGES["h2"]), esc(C.PACKAGES["lead"]),
          pkg_grid(C.PACKAGES["items"]),
-         esc(C.WEBSITES["h2"]), esc(C.WEBSITES["lead"]), pkg_grid(C.WEBSITES["items"]),
-         esc(C.WEBSITES["note"]),
          cta_band())
 
     svc = {"@context": "https://schema.org", "@type": "WebPage",
@@ -789,12 +787,68 @@ def build_services():
                             "availability": "https://schema.org/InStock",
                             "priceSpecification": price_spec(pr)}
                            for n, d, pr in [(i["name"], i["desc"], i["price"])
-                                            for i in C.PACKAGES["items"] + C.WEBSITES["items"]]]}}
+                                            for i in C.PACKAGES["items"]]]}}
 
     return page("services.html", "Services | Brass Tack Communications",
                 plain(C.SERVICES["lead"])[:300], body,
-                schema=[svc, WEB_SERVICE, crumbs_schema([("Home", "index.html"),
+                schema=[svc, crumbs_schema([("Home", "index.html"),
                                             ("Services", "services.html")])])
+
+
+def build_websites():
+    """Soft-launch landing page for the website offering. Reachable from the
+    footer only; noindexed until WEBSITES["public"] is True."""
+    body = """<section class="page-head">
+  <div class="wrap-wide">
+    <nav aria-label="Breadcrumb">
+      <ol class="crumbs">
+        <li><a href="index.html">Home</a></li>
+        <li aria-current="page">Websites</li>
+      </ol>
+    </nav>
+    <h1><span class="new-mark">New</span>%(h1)s</h1>
+    <p class="lead" style="margin-top:24px">%(lead)s</p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="contact.html">Let&rsquo;s chat %(arrow)s</a>
+      <a class="btn btn-ghost" href="work.html">See the work</a>
+    </div>
+  </div>
+</section>
+
+<section class="section-tight" style="padding-top:clamp(28px,4vw,56px)" aria-labelledby="pricing-h">
+  <div class="wrap-wide">
+    <div class="sec-head">
+      <div class="sec-head-stack"><h2 id="pricing-h">Pricing</h2></div>
+    </div>
+    <div class="offer-grid">
+%(tiers)s
+    </div>
+    <p class="price-note">%(note)s</p>
+  </div>
+</section>
+
+<section class="section-tight band-alt" aria-labelledby="web-faq-h">
+  <div class="wrap-wide">
+    <div class="sec-head">
+      <div class="sec-head-stack"><h2 id="web-faq-h">Common questions</h2></div>
+    </div>
+    <div class="faq">
+%(faq)s
+    </div>
+  </div>
+</section>
+
+%(cta)s""" % {"h1": esc(C.WEBSITES["h2"]), "lead": esc(C.WEBSITES["lead"]),
+              "arrow": ARROW, "tiers": pkg_grid(C.WEBSITES["items"]),
+              "note": esc(C.WEBSITES["note"]), "faq": faq_html(C.WEBSITE_FAQ),
+              "cta": cta_band()}
+
+    robots = ("index, follow, max-snippet:-1, max-image-preview:large"
+              if C.WEBSITES["public"] else "noindex, follow")
+    return page("websites.html", "Websites | Brass Tack Communications",
+                C.WEBSITES["lead"], body, robots=robots,
+                schema=[WEB_SERVICE, faq_schema(C.WEBSITE_FAQ),
+                        crumbs_schema([("Home", "index.html"), ("Websites", "websites.html")])])
 
 
 def build_about():
@@ -805,12 +859,7 @@ def build_about():
         <p>%s</p>
       </div>""" % (esc(n), esc(d)) for n, d in C.ABOUT["values"])
     ai = "\n        ".join("<p>%s</p>" % esc(p) for p in C.AI_SECTION["body"])
-    faq = "\n".join(
-        """    <details%s>
-      <summary>%s</summary>
-      <div class="faq-a"><p>%s</p></div>
-    </details>""" % (" open" if i == 0 else "", esc(q), esc(a))
-        for i, (q, a) in enumerate(C.FAQ))
+    faq = faq_html(C.FAQ)
 
     body = """<section class="page-head">
   <div class="wrap-wide">
@@ -977,7 +1026,7 @@ def build_sitemap(pages):
                 vids.setdefault("work-%s.html" % c["slug"], []).append((c, it))
     rows = []
     for p in pages:
-        if p == "404.html":
+        if p == "404.html" or (p == "websites.html" and not C.WEBSITES["public"]):
             continue
         loc = BASE + "/" + ("" if p == "index.html" else p)
         r = ["  <url>", "    <loc>%s</loc>" % loc,
@@ -1046,8 +1095,9 @@ def build_llms():
       "companies who need senior writing without adding headcount.")
     A("- Ad agencies, design firms, and production companies who need a writer or "
       "script they can put in front of a client.")
-    A("- Small and medium businesses who want a website whose words were actually "
-      "written by a professional, not filled in around a template.")
+    if C.WEBSITES["public"]:
+        A("- Small and medium businesses who want a website whose words were actually "
+          "written by a professional, not filled in around a template.")
     A("")
     A("## Distinguishing note")
     A("")
@@ -1066,19 +1116,20 @@ def build_llms():
     for i in C.PACKAGES["items"]:
         A("- **%s**: %s (%s)" % (i["name"], i["desc"], i["price"]))
     A("")
-    A("## %s" % C.WEBSITES["h2"])
-    A("")
-    A(C.WEBSITES["lead"])
-    A("")
-    A("| Tier | What it includes | Price (USD) |")
-    A("| --- | --- | --- |")
-    for i in C.WEBSITES["items"]:
-        A("| %s | %s | %s |" % (i["name"], i["desc"], i["price"]))
-    A("")
-    A("The tiers stack: the build price is in addition to the content price, and "
-      "ongoing care is in addition to the build. Available to clients in %s. %s"
-      % (", ".join(n for _, n in C.SERVES), C.WEBSITES["note"]))
-    A("")
+    if C.WEBSITES["public"]:
+        A("## %s" % C.WEBSITES["h2"])
+        A("")
+        A(C.WEBSITES["lead"])
+        A("")
+        A("| Tier | What it includes | Price (USD) |")
+        A("| --- | --- | --- |")
+        for i in C.WEBSITES["items"]:
+            A("| %s | %s | %s |" % (i["name"], i["desc"], i["price"]))
+        A("")
+        A("The tiers stack: the build price is in addition to the content price, and "
+          "ongoing care is in addition to the build. Available to clients in %s. %s"
+          % (", ".join(n for _, n in C.SERVES), C.WEBSITES["note"]))
+        A("")
     A("## Work")
     A("")
     for c in W.CATEGORIES:
@@ -1161,7 +1212,7 @@ def main():
     built = [build_home(), build_work_hub()]
     for i, cat in enumerate(W.CATEGORIES):
         built.append(build_category(i, cat))
-    built += [build_services(), build_about(), build_contact(), build_404()]
+    built += [build_services(), build_websites(), build_about(), build_contact(), build_404()]
     extras = [build_robots(), build_sitemap(built), build_llms()]
     redirects = build_redirects()
 

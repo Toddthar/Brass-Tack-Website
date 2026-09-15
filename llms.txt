@@ -12,7 +12,6 @@ Contact: todd@brass-tack.com, +1 (801) 318-0191
 
 - Marketing, product marketing, and communications teams at technology companies who need senior writing without adding headcount.
 - Ad agencies, design firms, and production companies who need a writer or script they can put in front of a client.
-- Small and medium businesses who want a website whose words were actually written by a professional, not filled in around a template.
 
 ## Distinguishing note
 
@@ -35,18 +34,6 @@ Brass Tack Communications (brass-tack.com) of Salt Lake City, Utah, founded 2011
 - **Web copy and blog programs**: Product and solution pages, site sections, and a steady stream of ghostwritten thought leadership on a schedule you can count on. (Per project or monthly retainer, quote available upon request)
 - **Live and virtual event content**: General sessions, theater presentations, and virtual conferences, scripted and content-managed end to end, with speaker coaching and onsite support. (Scoped per event, quote available upon request)
 - **Advertising campaigns**: Concept and copy for brand-level campaigns that run across print, web, social, and video, built on a messaging foundation that holds the whole thing together. (Pricing available upon request)
-
-## Websites, designed and built
-
-A new offering. Sites built with AI in the loop and structured so both search engines and AI assistants can read, understand, and cite them correctly. Then reviewed and revised line by line by a human, because that is the part that decides whether any of it is worth reading. This site was built exactly that way.
-
-| Tier | What it includes | Price (USD) |
-| --- | --- | --- |
-| Content only | Everything that goes on the site: structure, what belongs on each page, and the words themselves. Hand it to whoever builds it. | $4,000 |
-| Build and handoff | We design it, build it, and hand you the finished site along with everything it runs on. It is yours to host, own, and change whenever you like. | +$6,000 |
-| Ongoing care and content | Everything in the handoff option, plus we keep it running: updates, new pages, fresh content, fixes, and continued search and AI optimization as things change. | +$300/month |
-
-The tiers stack: the build price is in addition to the content price, and ongoing care is in addition to the build. Available to clients in United States, Canada, United Kingdom, Australia, New Zealand, Ireland. All prices in US dollars. Final pricing depends on project scope and is confirmed before any work begins.
 
 ## Work
 
@@ -109,21 +96,9 @@ Both, in that order of importance. AI is used where it earns its place, for rese
 
 Brass Tack is a small, specialized shop that focuses exclusively on content, messaging, and writing, without the usual layers of business development teams and account managers standing between you and the work. There are no junior writers, and your team always works directly with the person or team actually doing the work.
 
-### How much does a small business website cost?
-
-Brass Tack prices websites in three stacking tiers. Content only is $4,000 and covers site structure, what belongs on each page, and the words themselves. Adding design, build, and handoff of the finished site is a further $6,000. Ongoing care and content, which keeps the site updated and optimized, is a further $300 a month. Content projects other than websites are scoped and quoted per project.
-
-### What is included in a Brass Tack website build?
-
-The build tier covers design and development of the finished site along with everything it runs on, handed over for you to host, own, and change. It builds on the content tier, which covers structure, what belongs on each page, and the copy itself. Sites are structured so both search engines and AI assistants can read, understand, and cite them correctly, then reviewed and revised line by line by a human.
-
-### Can Brass Tack write the content for a website someone else builds?
-
-Yes. That is the content only tier at $4,000: site structure, what belongs on each page, and the words themselves, handed to whoever is doing the build.
-
 ### Who does Brass Tack Communications work with?
 
-Clients have included ServiceNow, Ivanti, Malwarebytes, DigiCert, Commvault, Broadcom, Cybersource, Optum Financial, Publicis Sapient, Henry Schein, DFIN, Micro Focus, Red Rider, Gantry, and Event Marketing Partners, alongside small and medium businesses that need a website whose words were actually written by a professional.
+Clients have included ServiceNow, Ivanti, Malwarebytes, DigiCert, Commvault, Broadcom, Cybersource, Optum Financial, Publicis Sapient, Henry Schein, DFIN, Micro Focus, Red Rider, Gantry, and Event Marketing Partners.
 
 ### Does Brass Tack work with clients outside of Utah?
 

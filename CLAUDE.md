@@ -42,7 +42,7 @@ HTML that will run on any host (or just by double-clicking `index.html`).
 | File / folder | What it is |
 |---|---|
 | `build.py` | The generator: page shell, header/footer, JSON-LD, sitemap, robots, llms.txt |
-| `src/content.py` | Home, About, Services, Contact copy + clients + FAQ + PACKAGES/WEBSITES |
+| `src/content.py` | Home, About, Services, Contact copy + clients + FAQ + WEBSITE_FAQ + PACKAGES/WEBSITES |
 | `src/work.py` | All 22 portfolio pieces across 6 categories |
 | `assets/css/site.css` | The entire stylesheet (one file, no framework) |
 | `assets/js/site.js` | ~90 lines: mobile menu, scroll reveal, click-to-play video |
@@ -61,7 +61,7 @@ all top-level `*.html`, the redirect folders listed above, `sitemap.xml`,
 
 ## Pages
 
-`index.html`, `work.html`, `work-video.html`, `work-articles.html`,
+`index.html`, `work.html`, `websites.html` (footer-only soft launch), `work-video.html`, `work-articles.html`,
 `work-collateral.html`, `work-advertising.html`, `work-events.html`,
 `work-web.html`, `services.html`, `about.html`, `contact.html`, `404.html`
 
@@ -82,6 +82,21 @@ The two treatments (text grid vs image grid) are what stop them reading as the
 same list twice. Do not converge them. The deliverable formerly called "Event
 content management" is now "Live and virtual event content" because it collided
 word-for-word with the service of that name.
+
+## Websites landing page (soft launch)
+
+The website offering lives on its own page, `websites.html`, not on Services.
+While `WEBSITES["public"]` is False in `src/content.py`:
+- the only link to it is in the site footer (every page, Company column)
+- it is `noindex`, and left out of `sitemap.xml`, `llms.txt`, and the
+  business-wide `serviceType` in the Organization schema
+- no other page mentions website pricing: the three website FAQs moved from
+  About to this page, and the Services/Contact search descriptions dropped
+  "websites"
+
+To promote it, set `"public": True` and rebuild. That flips indexing, sitemap,
+llms.txt and schema in one step. Adding it to the main menu or back onto
+Services is a separate, deliberate change.
 
 ## Home page section rhythm
 

@@ -120,7 +120,11 @@ voice stays his, without spreading a habit into sentences he didn't write.
 
 ## Pricing placeholders — needs Todd's numbers
 
-The Services page now has two sections under the six main services:
+**Update:** the website offering has moved off the Services page onto its own
+page, `websites.html`, linked only from the footer and hidden from search while it
+soft-launches. See `CLAUDE.md` for the one switch that makes it public.
+
+The Services page originally had two sections under the six main services:
 
 - **"What you can hire us for"** — six concrete deliverables that line up with the
   portfolio (video scripts, articles/white papers/e-books, collateral, web copy,
