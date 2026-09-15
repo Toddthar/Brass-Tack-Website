@@ -23,6 +23,45 @@ committing, or the `.html` files will be out of sync with `src/`.
 Canonical URLs deliberately point at `https://www.brass-tack.com` even on the
 preview, so the preview cannot outrank the real site. Leave them that way.
 
+## Todd is the source of truth (read before every change)
+
+Todd owns this site. His edits are final; Andrew's and Claude's edits are
+secondary and must never overwrite his. Every session, in this order:
+
+1. **`git pull` first.** Configured to rebase, so Todd's commits stay and any
+   local work is replayed on top.
+2. **Run `python3 build.py`.** It fingerprints every file it generates
+   (`.build-manifest.json`). If any generated page changed since the last build,
+   someone (usually Todd) edited it by hand on GitHub, and the build **stops
+   without writing anything**.
+3. **If it stops:** read his change with `git log -p -- <file>`, carry his exact
+   wording into `src/content.py` or `src/work.py`, then run
+   `python3 build.py --after-porting`. That rebuild checks every word and link of
+   his hand-edited version survived; if anything is missing it puts his pages
+   back untouched and exits.
+4. **Conflicts:** if Todd and Andrew changed the same thing, keep Todd's version.
+5. **Never force-push.** A local `.git/hooks/pre-push` lock refuses any push that
+   would erase or rewrite commits already on GitHub. Hooks are not stored in the
+   repo, so reinstall it if this folder is ever re-cloned (copy is below).
+
+Todd may change his own original copy freely. What still needs Andrew's explicit
+sign-off is Andrew- or Claude-initiated changes to wording marked VERBATIM.
+
+<details><summary>pre-push lock (reinstall to .git/hooks/pre-push, chmod +x)</summary>
+
+```sh
+#!/bin/sh
+zero=0000000000000000000000000000000000000000
+while read local_ref local_sha remote_ref remote_sha; do
+  if [ "$local_sha" = "$zero" ]; then echo "BLOCKED: would delete $remote_ref" >&2; exit 1; fi
+  if [ "$remote_sha" != "$zero" ] && ! git merge-base --is-ancestor "$remote_sha" "$local_sha" 2>/dev/null; then
+    echo "BLOCKED: GitHub has changes this push would overwrite. git pull --rebase first." >&2; exit 1
+  fi
+done
+exit 0
+```
+</details>
+
 ## Non-negotiable rule
 
 **All copy from the original site is preserved word for word**, including its
@@ -198,7 +237,8 @@ rather than being padded out, which would have shifted their underline.
      missing the word "of" (`src/work.py`, 2026-09-01).
   2. `"more than 25 years"` on the home page: the original said 20
      (`src/content.py`, 2026-09-01).
-  Everything else marked VERBATIM is still word for word.
+  Plus Todd's own edits, which need no sign-off. First one, 2026-09-15: dropped
+  "detailed" before "messaging framework" in the Services/home lead.
 - Em dash policy: Todd's original copy keeps every em dash it had (8 of them).
   New copy written for the rebuild adds none. Keep it that way.
 - `"NetDocuments solution  brochure"` and `"the range of content  services"` both

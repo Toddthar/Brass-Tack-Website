@@ -10,6 +10,7 @@ header/footer/SEO markup, and writes plain .html files into this folder.
 Nothing here needs a server or an internet connection.
 """
 import json, os, re, sys, datetime
+import html as html_mod
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(HERE, "src"))
@@ -1157,6 +1158,53 @@ def build_llms():
     return "llms.txt"
 
 
+# ------------------------------------------------------ Todd's edits win --
+# Todd owns this site and his edits are the source of truth. The web pages are
+# generated from src/, so a rebuild would silently wipe out anything Todd typed
+# directly into an .html file on GitHub. To make that impossible, every build
+# records a fingerprint of each file it wrote. The next build compares: if any
+# generated file has changed since, someone edited it by hand, and the build
+# stops without writing anything. The fix is to carry that wording into src/
+# first, then rebuild with --after-porting, which checks nothing was lost.
+import hashlib
+
+MANIFEST = os.path.join(HERE, ".build-manifest.json")
+
+
+def _sha(path):
+    with open(path, "rb") as f:
+        return hashlib.sha256(f.read()).hexdigest()
+
+
+def hand_edited_files():
+    if not os.path.exists(MANIFEST):
+        return []
+    recorded = json.load(open(MANIFEST, encoding="utf-8"))["files"]
+    return sorted(rel for rel, digest in recorded.items()
+                  if os.path.exists(os.path.join(HERE, rel))
+                  and _sha(os.path.join(HERE, rel)) != digest)
+
+
+def _visible_pieces(path):
+    """The words and link/image targets a visitor would notice, for comparing
+    a hand-edited page against the rebuilt one."""
+    s = open(path, encoding="utf-8").read()
+    s = re.sub(r"<script\b(?![^>]*ld\+json).*?</script>|<style.*?</style>", " ", s, flags=re.S)
+    attrs = re.findall(r'(?:href|src|alt|content)="([^"]*)"', s)
+    text = [html_mod.unescape(t).strip() for t in re.split(r"<[^>]+>", s)]
+    pieces = set(p for p in text + attrs if len(p.strip()) >= 3)
+    # dates stamped on every build are not edits
+    return {p for p in pieces if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", p)}
+
+
+def write_manifest(files):
+    data = {"note": "Fingerprints of generated files. Do not edit. See build.py.",
+            "files": {rel: _sha(os.path.join(HERE, rel)) for rel in sorted(files)}}
+    with open(MANIFEST, "w", encoding="utf-8") as f:
+        json.dump(data, f, indent=1)
+        f.write("\n")
+
+
 # ------------------------------------------------------------ old addresses --
 # Every address the old Squarespace site served that the new site does not.
 # GitHub Pages cannot do server redirects, so each becomes a tiny page that
@@ -1209,6 +1257,23 @@ def build_redirects():
 
 # ------------------------------------------------------------------- main --
 def main():
+    edited = hand_edited_files()
+    porting = "--after-porting" in sys.argv
+    if edited and not porting:
+        print("STOPPED. Nothing was written.")
+        print()
+        print("These pages were edited by hand since the last build (most likely by Todd")
+        print("on GitHub). Rebuilding would overwrite those edits:")
+        for rel in edited:
+            print("   ", rel)
+        print()
+        print("Todd's wording wins. Carry those edits into src/content.py or src/work.py,")
+        print("then run:  python3 build.py --after-porting")
+        print("(See each change with:  git log -p -- <file>)")
+        sys.exit(1)
+    before = {rel: _visible_pieces(os.path.join(HERE, rel)) for rel in edited}
+    originals = {rel: open(os.path.join(HERE, rel), "rb").read() for rel in edited}
+
     built = [build_home(), build_work_hub()]
     for i, cat in enumerate(W.CATEGORIES):
         built.append(build_category(i, cat))
@@ -1221,6 +1286,31 @@ def main():
         print("   ", p)
     print("Plus:", ", ".join(extras))
     print("Old-address redirects: %d" % len(redirects))
+
+    if before:
+        lost = {}
+        for rel, pieces in before.items():
+            after = _visible_pieces(os.path.join(HERE, rel))
+            missing = sorted(p for p in pieces - after)
+            if missing:
+                lost[rel] = missing
+        if lost:
+            print()
+            print("!! STOP: some of the hand-edited wording is not in the rebuilt pages.")
+            print("!! Todd's version must win. Nothing has been committed. Missing:")
+            for rel, missing in lost.items():
+                print("   ", rel)
+                for m in missing[:20]:
+                    print("        -", m[:140])
+            for rel, raw in originals.items():
+                with open(os.path.join(HERE, rel), "wb") as f:
+                    f.write(raw)
+            print("!! The hand-edited pages have been put back exactly as they were.")
+            print("!! Port the missing wording into src/, then run --after-porting again.")
+            sys.exit(2)
+        print("Hand-edited pages ported: every piece of the edited wording is still there.")
+
+    write_manifest(built + extras + [old + "/index.html" for old in OLD_URLS])
     if not S.get("address_confirmed"):
         print()
         print("!! REMINDER BEFORE LAUNCH: the business address (%s, %s) is out of date."

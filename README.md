@@ -19,6 +19,17 @@ Everything in this folder **is** the website. There is nothing to install.
 
 The full launch checklist is in `CLAUDE.md`.
 
+## How editing works now: Todd's edits always win
+
+- **Todd can edit anything, any way,** including directly on GitHub. His
+  changes go live and are treated as final.
+- **Your edits (through Claude) never overwrite his.** Every session starts by
+  pulling his latest changes. If he edited a page directly, the site build
+  refuses to run until his wording is carried into the source files, and it
+  double-checks that none of his words or links were lost.
+- **Your Mac cannot overwrite GitHub.** A built-in lock blocks any upload that
+  would erase his changes, even a forced one.
+
 ## Updating the live preview
 
 Make your change, rebuild, then push. The preview updates itself in about a minute.
