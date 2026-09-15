@@ -194,7 +194,8 @@ CLIENTS = [
 # --------------------------------------------------------------------------
 SERVICES = {
     "h1": "Skill, creativity, and experience when you need it",
-    "lead": "Whether it’s developing a detailed messaging framework for a full brand "
+    # "a detailed messaging framework" -> "a messaging framework", Todd's edit 2026-09-15.
+    "lead": "Whether it’s developing a messaging framework for a full brand "
             "awareness campaign, creating a detailed production script for your next user "
             "conference general session, or ghostwriting a short blog article, Brass Tack has "
             "the skills and experience to complement and enhance your internal content and "
