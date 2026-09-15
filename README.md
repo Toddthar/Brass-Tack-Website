@@ -1,7 +1,7 @@
 # Brass Tack Communications — new website
 
-**Live preview:** <https://andrewmswensen-hue.github.io/brass-tack-website/>
-**Repo:** <https://github.com/andrewmswensen-hue/brass-tack-website>
+**Repo:** <https://github.com/Toddthar/Brass-Tack-Website> (Todd's account; you have write access)
+**Live preview:** <https://toddthar.github.io/Brass-Tack-Website/> (works once Todd turns on GitHub Pages)
 
 Send your dad the preview link. It is the real site, fully working, just parked
 at a temporary address until you point `brass-tack.com` at it.
